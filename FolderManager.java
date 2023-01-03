@@ -1,33 +1,67 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.Set;
 
 public class FolderManager {
 
+	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
-
-		Map<String, String> prefixes = Map.of("test", "/Users/glodimendes/Desktop/Test/", "sim",
-				"/Users/glodimendes/Desktop/Sim/", "algdat", "/Users/glodimendes/Documents/Pessoal/ETH/AlgDat/",
-				"linalg", "/Users/glodimendes/Documents/Pessoal/ETH/LinAlg/", "eprog",
-				"/Users/glodimendes/Documents/Pessoal/ETH/EProg/", "diskmat",
-				"/Users/glodimendes/Documents/Pessoal/ETH/DiskMat/");
-
-		List<String> ignored = Arrays.asList(".ds_store");
-		Set<String> ignore = new HashSet<String>(ignored);
-
+		
+		File pFile = new File("/Users/glodimendes/Desktop/Origin/prefixes.txt");
+		
+		File iFile = new File("/Users/glodimendes/Desktop/Origin/ignore.txt");
+		
 		String origin = "/Users/glodimendes/Desktop/Origin";
+		
+		Map<String, String> prefixes = readPrefixes(pFile);
+		
+		Set<String> ignore = readIgnored(iFile);
 
 		System.out.println(distribute(origin, prefixes, ignore));
 
+	}
+	
+	public static Map readPrefixes(File prefixes) throws FileNotFoundException {
+		Scanner sc = new Scanner(prefixes);
+		
+		Map<String, String> out = new HashMap<String, String>();
+		
+		while (sc.hasNextLine()) {
+			String line = sc.nextLine();
+			if (line.equals("")) continue;
+			
+			String key = line.split(" ")[0];
+			String value = line.split(" ")[1];
+			
+			out.put(key, value);
+			
+		}
+		
+		
+		return out;
+	}
+	
+	public static Set readIgnored(File ignored) throws FileNotFoundException {
+		Scanner sc = new Scanner(ignored);
+		
+		Set<String> ignore = new HashSet<String>();
+		
+		while (sc.hasNextLine()) {
+			String line = sc.nextLine();
+			ignore.add(line);
+		}
+		
+		return ignore;
 	}
 
 	public static boolean isEmpty(String originPath, Set ignore) {
