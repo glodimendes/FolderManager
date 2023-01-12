@@ -17,9 +17,9 @@ public class FolderManager {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
 		//testing
-		File pFile = new File("/Users/glodimendes/Desktop/Origin/prefixes.txt");
+		File pFile = new File("/Users/glodimendes/Desktop/Origin/.prefixes.txt");
 		
-		File iFile = new File("/Users/glodimendes/Desktop/Origin/ignore.txt");
+		File iFile = new File("/Users/glodimendes/Desktop/Origin/.ignore.txt");
 		
 		String origin = "/Users/glodimendes/Desktop/Origin";
 		
