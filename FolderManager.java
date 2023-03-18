@@ -17,21 +17,22 @@ public class FolderManager {
 	@SuppressWarnings("unchecked")
 	public static void main(String[] args) throws IOException {
 		//testing
-		File pFile = new File("/Users/glodimendes/Desktop/Origin/.prefixes.txt");
+		File prefixesFile = new File("/Users/glodimendes/Desktop/Origin/.prefixes.txt");
 		
-		File iFile = new File("/Users/glodimendes/Desktop/Origin/.ignore.txt");
+		File ignoreFile = new File("/Users/glodimendes/Desktop/Origin/.ignore.txt");
 		
 		String origin = "/Users/glodimendes/Desktop/Origin";
 		
-		Map<String, String> prefixes = readPrefixes(pFile);
 		
-		Set<String> ignore = readIgnored(iFile);
+		Map<String, String> prefixes = readPrefixes(prefixesFile);
+		
+		Set<String> ignore = readIgnored(ignoreFile);
 
 		System.out.println(distribute(origin, prefixes, ignore));
 
 	}
 	
-	public static Map readPrefixes(File prefixes) throws FileNotFoundException {
+	public static Map<String, String> readPrefixes(File prefixes) throws FileNotFoundException {
 		Scanner sc = new Scanner(prefixes);
 		
 		Map<String, String> out = new HashMap<String, String>();
@@ -40,8 +41,13 @@ public class FolderManager {
 			String line = sc.nextLine();
 			if (line.equals("")) continue;
 			
+			//splits line, first part is the prefix
 			String key = line.split(" ")[0];
-			String value = line.split(" ")[1];
+			
+			//rest of the line is the path that needs to be addressed to
+			int length = key.length();	 //gets at which point of the line the prefix goes.
+			
+			String value = line.substring(length + 1);
 			
 			out.put(key, value);
 			
@@ -94,7 +100,8 @@ public class FolderManager {
 
 		ArrayList<String> errors = new ArrayList<String>();
 
-		if (!isEmpty(originPath, ignore)) {
+		if (!isEmpty(originPath, ignore)) { //checks if the directory is not empty
+			
 			for (String file : origin.list()) {
 				String pathFrom = originPath + "/" + file; // defines origin
 
@@ -122,6 +129,7 @@ public class FolderManager {
 
 		if (errors.size() == 0) {
 			return "Files distributed successfully";
+			
 		} else { // indicate error in prefix naming
 			String out = "The following prefixes don't exist:";
 			for (String prefix : errors) {
