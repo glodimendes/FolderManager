@@ -29,6 +29,7 @@ public class FolderManager {
 		Set<String> ignore = readIgnored(ignoreFile);
 
 		System.out.println(distribute(origin, prefixes, ignore));
+		
 
 	}
 	
